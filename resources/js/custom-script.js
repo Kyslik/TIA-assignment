@@ -1,12 +1,11 @@
 $(document).ready(function() {
-	createNavigation();
+	createNavigation(showBreadcrumbs);
 	//initial content or load content depending on breadcrumb
-	showBreadcrumbs();
+	//showBreadcrumbs();
 	
 	
-	$('div.nav-collapse ul.nav').on("click", "li a", function(e) {
-		
-
+	$('div.nav-collapse ul.nav, ul.breadcrumb').on("click", "li a", function(e) {
+	
 		var clicked = $(this);
 		var href = clicked.attr('href');
 
@@ -14,14 +13,22 @@ $(document).ready(function() {
 			if (!checkURL(href)) {
 				e.preventDefault();
 				//lets load new content
-				console.log(href);
+				//console.log(href);
+				if (!clicked.parent().hasClass('active')) {
+					addBreadcrumb(clicked.data('breadcrumb'), href);
+				}
 			}
 		}
-
+		
 	});
 
 });
 
+function activateNav(href) {
+	console.log($('a[href="' + href + '"]:first').parent());
+	$('div.nav-collapse ul.nav li').removeClass('active');
+	$('a[href=' + href + ']').parent().addClass("active");
+}
 
 function showBreadcrumbs() {
 
@@ -31,21 +38,56 @@ function showBreadcrumbs() {
 		resetBreadcrumbs();
 		return 0;
 	} else {
-		$('div#breadcrumb').html('<ul class="breadcrumb"><ul>');
-		b_selector = $('div#breadcrumb ul.breadcrumb');
-		for (var i = 0; i < breadcrumbs.length; i++) {
-			if (i == breadcrumbs.length - 1) {
-				//last iteeration
-				b_selector.append('<li class="active">' + breadcrumbs[i].name + '</li>');
-			} else {
-				b_selector.append('<li><a href="' + breadcrumbs[i].href + '">' + breadcrumbs[i].name + '</a> <span class="divider">/</span></li>');
-			}
-		};
+		drawBreadcrumbs(breadcrumbs);
 	}
 }
 
 function addBreadcrumb(name, href) {
-	
+	var breadcrumbs = JSON.parse(localStorage.getItem('8787_breadcrumbs')) || [];
+
+	if (JSON.stringify(breadcrumbs[breadcrumbs.length-1]) == JSON.stringify({name:name, href:href})) return false;
+
+	breadcrumbs.push({name:name, href:href});
+
+	if (breadcrumbs.length >= 6) {	
+		breadcrumbs.shift();
+	}
+
+	localStorage.setItem('8787_breadcrumbs', JSON.stringify(breadcrumbs));
+
+	reDraw(breadcrumbs);
+
+	function reDraw(breadcrumbs) {
+
+		console.log("animation called");
+		$('div#breadcrumb').stop().animate({
+			opacity: 0,
+		}, 300, function() {
+
+			drawBreadcrumbs(breadcrumbs);
+		
+			$(this).stop().animate({
+				opacity: 1,
+			}, 600, function() {});
+		});
+	}
+
+}
+
+function drawBreadcrumbs(breadcrumbs) {
+	$('div#breadcrumb').html('<ul class="breadcrumb"><ul>');
+	b_selector = $('div#breadcrumb ul.breadcrumb');
+	for (var i = 0; i < breadcrumbs.length; i++) {
+		if (i == breadcrumbs.length - 1) {
+			//last iteeration
+			activateNav(breadcrumbs[i].href);
+			b_selector.append('<li class="active">' + breadcrumbs[i].name + '</li>');
+			$('#main-container').load('./content/' +  breadcrumbs[i].href + '.html');
+
+		} else {
+			b_selector.append('<li><a href="' + breadcrumbs[i].href + '">' + breadcrumbs[i].name + '</a> <span class="divider">/</span></li>');
+		}
+	};
 }
 
 function resetBreadcrumbs() {
@@ -55,12 +97,15 @@ function resetBreadcrumbs() {
 	//show default content
 	$('#main-container').load('./content/home.html');
 	//add default
-	$('div#breadcrumb').html('<ul class="breadcrumb"><ul>');
+/*	$('div#breadcrumb').html('<ul class="breadcrumb"><ul>');
 	b_selector = $('div#breadcrumb ul.breadcrumb');
-	b_selector.append('<li class="active">Home</li>');
+	b_selector.append('<li class="active">Home</li>');*/
+	drawBreadcrumbs([{name: "Home", href:"home"}]);
+	localStorage.setItem('8787_breadcrumbs', JSON.stringify([{name: "Home", href:"home"}]));
+
 }
 
-function createNavigation() {
+function createNavigation(callback) {
 	//returns HTML of nav, append it to <ul class="nav">
 	var navigationJson;
 
@@ -84,15 +129,23 @@ function createNavigation() {
 			}
 		};
 
-
+		if (callback && typeof(callback) === "function") {  
+			console.log('callback called');
+	        callback();  
+    	}  
+    	
 	}).error(function() {
 		console.log('Navigation.json is not found.');
-	})
+	});
 
 	function appendLi(to, obj) {
 		var blank = "";
+		var breadcrumb_name = obj.name;
+
 		if (checkURL(obj.load_content)) blank = 'target="_blank"'; 
-		to.append('<li><a href="' + obj.load_content + '" ' + blank + ' >' + obj.name + '</a></li>');
+		if (typeof(obj.breadcrumb_name) !== 'undefined') breadcrumb_name = obj.breadcrumb_name; 
+
+		to.append('<li><a data-breadcrumb="' + breadcrumb_name + '" href="' + obj.load_content + '" ' + blank + ' >' + obj.name + '</a></li>');
 	}
 
 	function createSubNav(to, obj) {
@@ -131,6 +184,8 @@ function createNavigation() {
 			}
 		};
 	}
+
+	
 
 }
 

@@ -3,6 +3,11 @@
     "name": "Home" , 
     "load_content": "home",
     "sub_menu": false
+  },
+  { 
+    "name": "Blog" , 
+    "load_content": "bloging",
+    "sub_menu": false
   }, 
   { 
     "name":"Game" , 
@@ -15,11 +20,13 @@
             {
               "name": "Play",
               "load_content": "game-15-coins",
+              "breadcrumb_name": "Play 15 Coins",
               "sub_menu": false
             },
             {
               "name": "Graph",
               "load_content": "graph-15-coins",
+              "breadcrumb_name": "Graph of 15 Coins",
               "sub_menu": false
             },
             {
