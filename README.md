@@ -3,7 +3,7 @@ TIA-assignment
 
 Final assignment for TIA.
 
-Poziadavky
+Požiadavky
 ==========
 
 1. Návrh grafického dizajnu pomocou CSS len v externom súbore. Prispôsobenie stránky pre tlač 
