@@ -2,20 +2,24 @@ $(document).ready(function() {
 	createNavigation(showBreadcrumbs);
 	//initial content or load content depending on breadcrumb
 	//showBreadcrumbs();
-	
-	
-	$('div.nav-collapse ul.nav, ul.breadcrumb').on("click", "li a", function(e) {
-	
+
+
+
+	$('div.nav-collapse ul.nav, div#breadcrumb ').on("click", "li a", function(e) {
+		e.preventDefault();
 		var clicked = $(this);
 		var href = clicked.attr('href');
 
+		console.log(clicked);
 		if (href != "#") {
 			if (!checkURL(href)) {
 				e.preventDefault();
 				//lets load new content
 				//console.log(href);
 				if (!clicked.parent().hasClass('active')) {
-					addBreadcrumb(clicked.data('breadcrumb'), href);
+					var b_name = clicked.text();
+					if (typeof(clicked.data('breadcrumb')) !== "undefined") b_name = clicked.data('breadcrumb');
+					addBreadcrumb(b_name, href);
 				}
 			}
 		}
@@ -30,7 +34,7 @@ function activateNav(href) {
 	$('a[href=' + href + ']').parent().addClass("active");
 }
 
-function showBreadcrumbs() {
+function showBreadcrumbs(callback) {
 
 	var breadcrumbs = JSON.parse(localStorage.getItem('8787_breadcrumbs')) || [];
 
@@ -40,6 +44,12 @@ function showBreadcrumbs() {
 	} else {
 		drawBreadcrumbs(breadcrumbs);
 	}
+
+	if (callback && typeof(callback) === "function") {  
+		console.log('callback called');
+		callback();  
+	}  
+
 }
 
 function addBreadcrumb(name, href) {
@@ -75,8 +85,9 @@ function addBreadcrumb(name, href) {
 }
 
 function drawBreadcrumbs(breadcrumbs) {
-	$('div#breadcrumb').html('<ul class="breadcrumb"><ul>');
-	b_selector = $('div#breadcrumb ul.breadcrumb');
+	$('div#breadcrumb').html('').append('<ul class="breadcrumb"></ul>');
+	b_selector = $('div#breadcrumb > ul');
+
 	for (var i = 0; i < breadcrumbs.length; i++) {
 		if (i == breadcrumbs.length - 1) {
 			//last iteeration
@@ -133,7 +144,7 @@ function createNavigation(callback) {
 			console.log('callback called');
 	        callback();  
     	}  
-    	
+
 	}).error(function() {
 		console.log('Navigation.json is not found.');
 	});
