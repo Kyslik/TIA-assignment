@@ -1,7 +1,8 @@
 $(document).ready(function() {
 	createNavigation();
-	//initial content
-	$('#main-container').load('./content/home.html');
+	//initial content or load content depending on breadcrumb
+	showBreadcrumbs();
+	
 	
 	$('div.nav-collapse ul.nav').on("click", "li a", function(e) {
 		
@@ -22,7 +23,42 @@ $(document).ready(function() {
 });
 
 
+function showBreadcrumbs() {
 
+	var breadcrumbs = JSON.parse(localStorage.getItem('8787_breadcrumbs')) || [];
+
+	if (breadcrumbs.length <= 1) {
+		resetBreadcrumbs();
+		return 0;
+	} else {
+		$('div#breadcrumb').html('<ul class="breadcrumb"><ul>');
+		b_selector = $('div#breadcrumb ul.breadcrumb');
+		for (var i = 0; i < breadcrumbs.length; i++) {
+			if (i == breadcrumbs.length - 1) {
+				//last iteeration
+				b_selector.append('<li class="active">' + breadcrumbs[i].name + '</li>');
+			} else {
+				b_selector.append('<li><a href="' + breadcrumbs[i].href + '">' + breadcrumbs[i].name + '</a> <span class="divider">/</span></li>');
+			}
+		};
+	}
+}
+
+function addBreadcrumb(name, href) {
+	
+}
+
+function resetBreadcrumbs() {
+	//delete all
+	$('div#breadcrumb').html('');
+	localStorage.removeItem('8787_breadcrumbs');
+	//show default content
+	$('#main-container').load('./content/home.html');
+	//add default
+	$('div#breadcrumb').html('<ul class="breadcrumb"><ul>');
+	b_selector = $('div#breadcrumb ul.breadcrumb');
+	b_selector.append('<li class="active">Home</li>');
+}
 
 function createNavigation() {
 	//returns HTML of nav, append it to <ul class="nav">

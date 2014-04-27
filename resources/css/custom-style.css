@@ -32,10 +32,11 @@ body {
 	}
 }
 
-#wrap > .container {
+div#wrap > div.first-container {
 	padding-top: 60px;
 }
-.container .credit {
+
+div.container .credit {
 	margin: 20px 0;
 }
 
