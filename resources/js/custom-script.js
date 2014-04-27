@@ -1,6 +1,28 @@
 $(document).ready(function() {
 	createNavigation();
+	//initial content
+	$('#main-container').load('./content/home.html');
+	
+	$('div.nav-collapse ul.nav').on("click", "li a", function(e) {
+		
+
+		var clicked = $(this);
+		var href = clicked.attr('href');
+
+		if (href != "#") {
+			if (!checkURL(href)) {
+				e.preventDefault();
+				//lets load new content
+				console.log(href);
+			}
+		}
+
+	});
+
 });
+
+
+
 
 function createNavigation() {
 	//returns HTML of nav, append it to <ul class="nav">
@@ -32,7 +54,9 @@ function createNavigation() {
 	})
 
 	function appendLi(to, obj) {
-		to.append('<li><a href="' + obj.load_content + '">' + obj.name + '</a></li>');
+		var blank = "";
+		if (checkURL(obj.load_content)) blank = 'target="_blank"'; 
+		to.append('<li><a href="' + obj.load_content + '" ' + blank + ' >' + obj.name + '</a></li>');
 	}
 
 	function createSubNav(to, obj) {
@@ -72,4 +96,12 @@ function createNavigation() {
 		};
 	}
 
+}
+
+function checkURL(value) {
+    var urlregex = new RegExp("^(http|https|ftp)\://([a-zA-Z0-9\.\-]+(\:[a-zA-Z0-9\.&amp;%\$\-]+)*@)*((25[0-5]|2[0-4][0-9]|[0-1]{1}[0-9]{2}|[1-9]{1}[0-9]{1}|[1-9])\.(25[0-5]|2[0-4][0-9]|[0-1]{1}[0-9]{2}|[1-9]{1}[0-9]{1}|[1-9]|0)\.(25[0-5]|2[0-4][0-9]|[0-1]{1}[0-9]{2}|[1-9]{1}[0-9]{1}|[1-9]|0)\.(25[0-5]|2[0-4][0-9]|[0-1]{1}[0-9]{2}|[1-9]{1}[0-9]{1}|[0-9])|([a-zA-Z0-9\-]+\.)*[a-zA-Z0-9\-]+\.(com|edu|gov|int|mil|net|org|biz|arpa|info|name|pro|aero|coop|museum|[a-zA-Z]{2}))(\:[0-9]+)*(/($|[a-zA-Z0-9\.\,\?\'\\\+&amp;%\$#\=~_\-]+))*$");
+    if (urlregex.test(value)) {
+        return (true);
+    }
+    return (false);
 }

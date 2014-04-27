@@ -44,13 +44,8 @@
               "sub_menu": false
             },
             {
-              "name": "Graph3",
+              "name": "Graph",
               "load_content": "graph-sudoku",
-              "sub_menu": false
-            },
-            {
-              "name": "Github",
-              "load_content": "https://github.com/Kyslik/sudoku",
               "sub_menu": false
             }
           ]
