@@ -33,39 +33,28 @@
           "name": "smthn",
           "load_content": "load_me",
           "sub_menu": false
+        },
+        {
+          "name": "Sudoku",
+          "load_content": false,
+          "sub_menu": [
+            {
+              "name": "Play",
+              "load_content": "game-sudoku",
+              "sub_menu": false
+            },
+            {
+              "name": "Graph3",
+              "load_content": "graph-sudoku",
+              "sub_menu": false
+            },
+            {
+              "name": "Github",
+              "load_content": "https://github.com/Kyslik/sudoku",
+              "sub_menu": false
+            }
+          ]
         }
       ] 
-  },
-  { 
-  "name":"Game2" , 
-  "load_content": false,
-  "sub_menu": [
-      {
-        "name": "15-coins",
-        "load_content": false,
-        "sub_menu": [
-          {
-            "name": "Play",
-            "load_content": "game-15-coins",
-            "sub_menu": false
-          },
-          {
-            "name": "Graph",
-            "load_content": "graph-15-coins",
-            "sub_menu": false
-          },
-          {
-            "name": "Github",
-            "load_content": "https://github.com/Kyslik/15-drobnych",
-            "sub_menu": false
-          }
-        ]
-      },
-      {
-        "name": "smthn",
-        "load_content": "load_me",
-        "sub_menu": false
-      }
-    ] 
   }
 ]

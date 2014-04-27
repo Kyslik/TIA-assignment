@@ -16,12 +16,11 @@ function createNavigation() {
 		navigation.html('');
 		navigation.append('<a class="brand" href="#">Final assignment</a>');
 
-		/*console.log(navigationJson);*/
+		console.log(navigationJson);
 
 		for (var i = 0; i < navigationJson.length; i++) {
 			if (navigationJson[i].load_content == false) {
 				createSubNav(navigation, navigationJson[i]);
-
 			} else {
 				appendLi(navigation, navigationJson[i]);
 			}
@@ -46,7 +45,7 @@ function createNavigation() {
 		for (var i = 0; i < obj.sub_menu.length; i++) {
 			if(obj.sub_menu[i].load_content == false) {
 				// create submenu2
-				create2ndSubNav(to, obj.sub_menu[i]);
+				create2ndSubNav(to, obj.sub_menu[i], i);
 			} else {
 				appendLi(to, obj.sub_menu[i]);
 			}
@@ -54,9 +53,9 @@ function createNavigation() {
 
 	}
 
-	function create2ndSubNav(to, obj) {
-		to.append('<li class="dropdown-submenu"></li>');
-		to = $(to.selector + ' li.dropdown-submenu').append('<a tabindex="-1" href="#">' + obj.name + '</a>');
+	function create2ndSubNav(to, obj, i) {
+		to.append('<li class="dropdown-submenu" id="'+ obj.name + i + '-submenu"></li>');
+		to = $(to.selector + ' li#' + obj.name + i + '-submenu').append('<a tabindex="-' + i + '" href="#">' + obj.name + '</a>');
 		createUl(to, obj.sub_menu);
 	}
 
