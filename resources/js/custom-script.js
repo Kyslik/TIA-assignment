@@ -6,7 +6,7 @@ $(document).ready(function() {
 
 
 	$('div.nav-collapse ul.nav, div#breadcrumb ').on("click", "li a", function(e) {
-		e.preventDefault();
+		//e.preventDefault();
 		var clicked = $(this);
 		var href = clicked.attr('href');
 
