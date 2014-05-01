@@ -40,7 +40,7 @@ function showBreadcrumbs(callback) {
 	}
 
 	if (callback && typeof(callback) === "function") {  
-		console.log('callback called');
+		//console.log('callback called');
 		callback();  
 	}  
 
@@ -87,7 +87,7 @@ function drawBreadcrumbs(breadcrumbs) {
 			//last iteeration
 			activateNav(breadcrumbs[i].href);
 			b_selector.append('<li class="active">' + breadcrumbs[i].name + '</li>');
-			$('#main-container').load('./content/' +  breadcrumbs[i].href + '.html');
+			//$('#main-container').load('./content/' +  breadcrumbs[i].href + '.html');
 			loadContent(breadcrumbs[i].href);
 
 		} else {
@@ -107,18 +107,15 @@ function resetBreadcrumbs() {
 	localStorage.setItem('8787_breadcrumbs', JSON.stringify([{name: "Home", href:"home"}]));
 }
 
-
-function loadContent(c) {
-	$('#main-container').load('./content/' +  href + '.html');
-/*    $('#main-container').stop().animate({
-        opacity: 0
-    }, 300, function() {
-        $('#main-container').load(c, function() {
-            $(this).stop().animate({
-                opacity: 1
-            }, 300);
-        });
-    });*/
+function loadContent(href) {
+	$('#main-container').stop().animate({
+		opacity: 0,
+	}, 300, function() {
+		$('#main-container').load('./content/' +  href + '.html');
+		$(this).stop().animate({
+			opacity: 1,
+		}, 600);
+	});
 }
 
 function createNavigation(callback) {
