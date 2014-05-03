@@ -1,6 +1,7 @@
 $(document).ready(function() {
 	createNavigation(showBreadcrumbs);
 	lastSeen();
+	accessCount();
 
 	$('div.nav-collapse ul.nav, div#breadcrumb ').on("click", "li a", function(e) {
 		//e.preventDefault();
@@ -142,11 +143,22 @@ function lastSeen() {
 	var last_seen = localStorage.getItem('8787_lastSeen');
 	if (!last_seen) { 
 		$('#last-seen').html('now');
-
 	} else {
 		$('#last-seen').html(last_seen);
 	}
 	localStorage.setItem('8787_lastSeen', d);
+}
+
+function accessCount() {
+	var count = localStorage.getItem('8787_accessCount');
+	if (!count) { 
+		$('#access-count').html('1');
+		count = 1;
+	} else {
+		$('#access-count').html(count);
+	}
+	count++;
+	localStorage.setItem('8787_accessCount', count);
 }
 
 function activateNav(href) {
@@ -324,9 +336,6 @@ function createNavigation(callback) {
 			}
 		};
 	}
-
-	
-
 }
 
 function checkURL(value) {
