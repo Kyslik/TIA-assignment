@@ -1,0 +1,30 @@
+<div class="page-header">
+  <h1>Notes</h1>
+</div>
+<form id="note-form">
+	<input type="text" id="note-name" class="span3" required value="" placeholder="Name">&nbsp;&nbsp;&nbsp;&nbsp;
+	<div class="input-append">
+	  <input type="text" id="note-text" class="span8" value="" placeholder="Text">
+	  <button class="btn" id="note-btn-reset" type="button"><i class="icon-remove"> </i></button>
+	  <button class="btn" id="note-btn-save" type="button"><i class="icon-ok"> </i></button>
+	</div>
+</form>
+<table id="notes-table" class="table table-striped">
+	<thead>
+	<tr>
+	  <!-- <th class="span1">#</th> -->
+	  <th class="span2">Created at</th>
+	  <th class="span2">Name</th>
+	  <th class="span6">Text</th>
+	  <th class="span1">Options</th>
+	</tr>
+	</thead>
+	<tbody>
+	</tbody>
+</table>
+<div id="zero-notes">
+	<p>0 notes. Nothing to show.</p>
+</div>
+<script type="text/javascript">
+	showNotes();
+</script>

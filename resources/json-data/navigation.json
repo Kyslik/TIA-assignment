@@ -5,8 +5,8 @@
     "sub_menu": false
   },
   { 
-    "name": "Blog" , 
-    "load_content": "bloging",
+    "name": "Notes" , 
+    "load_content": "notes",
     "sub_menu": false
   }, 
   { 

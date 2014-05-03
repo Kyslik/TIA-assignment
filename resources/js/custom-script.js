@@ -6,7 +6,7 @@ $(document).ready(function() {
 		var clicked = $(this);
 		var href = clicked.attr('href');
 
-		console.log(clicked);
+		//console.log(clicked);
 		if (href != "#") {
 			if (!checkURL(href)) {
 				e.preventDefault();
@@ -20,7 +20,120 @@ $(document).ready(function() {
 		
 	});
 
+	$('#main-container').on("click", "#note-btn-reset",function(e) {
+		//console.log($('form#not-form'));
+		$('input').val('');
+		constructNoteTable();
+	});
+
+	$('#main-container').on("click", "#note-btn-save",function(e) {
+		//console.log($('form#not-form'));
+		var name = $('input#note-name').val();
+		var text = $('input#note-text').val();
+
+		var d = (new Date()+'').split(' ');
+		d = [d[3], d[1], d[2], d[4]].join(' ');
+		if (text.length === 0 || text === "") text = 'n/a';
+
+		if (name.length === 0 || name === "") {
+
+			$('input#note-name').focus();
+
+		} else {
+			addNote(d, name, text);
+			$('input').val('');
+		}
+		
+	});
+
+	$('#main-container').on("click", ".note-btn-check", function (e) {
+		index = $(this).data('id');
+		var notes = JSON.parse(localStorage.getItem('8787_notes')) || [];
+		if (JSON.stringify(notes) != JSON.stringify([])) { 
+			notes.splice(index, 1);
+			localStorage.setItem('8787_notes', JSON.stringify(notes));
+			$(this).closest('tr').fadeOut('slow');
+			constructNoteTable();
+		}
+		
+	});
+
 });
+
+function addNote(datetime, name, text) {
+	var notes = JSON.parse(localStorage.getItem('8787_notes')) || [];
+	var animate = true;
+	if (JSON.stringify(notes) == JSON.stringify([])) animate = false;
+	
+	notes.push({datetime: datetime, name: name, text: text});
+	localStorage.setItem('8787_notes', JSON.stringify(notes));
+	constructNoteTable(addNote2Table({i: notes.length-1, datetime: datetime, name: name, text: text}, animate));
+}
+
+function showNotes() {
+	//this function is called only once pre note load
+	notes = constructNoteTable();
+	for (var i = 0; i < notes.length; i++) {
+		note = notes[i];
+		note.i = i;
+		addNote2Table(note, false);
+	};
+	
+}
+
+function addNote2Table(note, animation) {
+	var tbody = $('table#notes-table > tbody');
+	if (animation == true) {
+		var table = $('table#notes-table');
+		
+		table.stop().animate({opacity: 0}, 300, function() {
+			tbody.prepend('<tr><td>' + note.datetime + '</td><td>' + note.name + '</td><td>' + note.text + '</td><td><button class="btn btn-mini note-btn-check" data-id="' + note.i + '" type="button"><i class="icon-ok"> </i></button></td></tr>');
+			table.stop().animate({opacity: 1}, 300);
+		});
+	} else {
+		tbody.prepend('<tr><td>' + note.datetime + '</td><td>' + note.name + '</td><td>' + note.text + '</td><td><button class="btn btn-mini note-btn-check" data-id="' + note.i + '" type="button"><i class="icon-ok"> </i></button></td></tr>');
+
+	}
+
+}
+
+function constructNoteTable(callback) {
+	var notes = JSON.parse(localStorage.getItem('8787_notes')) || [];
+
+	var table = $('table#notes-table');
+	var zero_notes = $('div#zero-notes');
+
+	if (JSON.stringify(notes) == JSON.stringify([])) {
+		//show zero_notes
+		if ( table.css('display') != 'none' ) {
+			table.fadeOut('800', function() {
+				zero_notes.fadeIn('400');
+			});						
+		}
+
+		if (zero_notes.css('opacity') == 0 ) {
+			zero_notes.stop().animate({opacity: 1}, 300);
+		}
+		
+	} else {
+		//show table
+		if ( zero_notes.css('display') != 'none') {
+			zero_notes.fadeOut('400', function() {
+				table.fadeIn('400');
+			});	
+		}
+
+		if (table.css('opacity') == 0 ) {
+			table.stop().animate({opacity: 1}, 300);
+		}
+	}
+
+	if (callback && typeof(callback) === "function") {  
+		//console.log('callback called');
+		callback();  
+	} 
+	return notes;
+}
 
 function activateNav(href) {
 	console.log($('a[href="' + href + '"]:first').parent());
