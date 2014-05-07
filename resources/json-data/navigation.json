@@ -30,7 +30,12 @@
               "sub_menu": false
             },
             {
-              "name": "Github",
+              "name": "Standalone version",
+              "load_content": "http://tina.fei.stuba.sk/~xkiesel/game/",
+              "sub_menu": false
+            },
+            {
+              "name": "GitHub",
               "load_content": "https://github.com/Kyslik/15-drobnych",
               "sub_menu": false
             }
@@ -41,6 +46,11 @@
   { 
     "name": "Contact" , 
     "load_content": "contact",
+    "sub_menu": false
+  },
+  { 
+    "name": "GitHub" , 
+    "load_content": "https://github.com/Kyslik/TIA-assignment#tia-assignment",
     "sub_menu": false
   }
 ]
