@@ -40,6 +40,23 @@
               "sub_menu": false
             }
           ]
+        },
+        {
+          "name": "Solitare",
+          "load_content": false,
+          "sub_menu": [
+            {
+              "name": "Play",
+              "load_content": "game-solitare",
+              "breadcrumb_name": "Play Solitare",
+              "sub_menu": false
+            },
+            {
+              "name": "Standalone version",
+              "load_content": "http://tina.fei.stuba.sk/~xklinec/semestral/game_klinec.html",
+              "sub_menu": false
+            }
+          ]
         }
       ] 
   },
