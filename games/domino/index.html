@@ -1,0 +1,917 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+  <head>
+  <meta http-equiv="content-type" content="text/html; charset=windows-1250">
+  <meta name="generator" content="PSPad editor, www.pspad.com">
+  <LINK rel="stylesheet" type="text/css" href="dominocss.css">
+
+  <title></title>
+  </head>
+  
+  <body id="body" onload=initialize()>
+  
+  <script src="amcharts/amcharts.js" type="text/javascript"></script>
+<script src="amcharts/serial.js" type="text/javascript"></script>
+  <script>
+  
+    var vsetky_kocky = new Array(7);
+    var vyhodene_kocky = new Array(7);
+    var hrac1_kocky = new Array(7);
+    var hrac2_kocky = new Array(7);
+    
+    var hrac1_kocky_div = new Array(15);
+    var hrac2_kocky_div = new Array(15);
+    
+    var prava_strana = new Array(15);
+    var lava_strana = new Array(15);
+    
+    var prava_strana_pole = new Array(15);
+    var lava_strana_pole = new Array(15);
+    
+    var stredna_kocka_string;
+    
+    var index_prava_strana = 0;
+    var index_lava_strana = 0;
+    
+    var index_prava_hrana = 0;
+    var index_lava_hrana = 0;
+    
+    var prava_hrana;
+    var lava_hrana;
+    
+    var ran1;
+    var ran2;
+    
+    var body_hrac1 = 0;
+    var body_hrac2 = 0;
+    
+    var pocet_kociek_hrac1 = 7;
+    var pocet_kociek_hrac2 = 7;
+    
+    
+    //prekrasli plochu/////////////////////////////////////////////////////////
+    function rasterize_kocky_div () {
+    
+  
+    var k = 0;
+    
+    for (var i=0;i<=14;i++) {
+    
+       var t = ((k * 5) + 50).toString() + 'px';
+       hrac1_kocky_div[k].style.left = t;
+       k++;
+        
+    }
+    
+    k=0;
+    var pom_kocky = new Array(7);
+    for (var i=0;i<=6;i++) {
+      pom_kocky[i] = new Array(7);
+    }
+    for (var i=0;i<=6;i++) {
+      
+      for (var j=0;j<=6;j++) {
+        pom_kocky[i][j] = true;
+      }
+      }
+      
+    for (var i=0;i<=6;i++) {
+      
+      for (var j=0;j<=6;j++) {
+         
+        if ((hrac1_kocky[i][j] == true) && (pom_kocky[i][j] == true)) {
+        
+          pom_kocky[i][j] = false;
+          pom_kocky[j][i] = false; 
+          
+          var s = i.toString() + '_' + j.toString() + '.jpg';
+          hrac1_kocky_div[k].style.backgroundImage='url('+s+')';
+          var q = i.toString() + '_' + j.toString();
+          hrac1_kocky_div[k].id = q;
+          k++;
+        }
+        else {
+          
+            var q = i.toString() + '_' + j.toString();
+          
+            for(var y=0;y<=14;y++) {
+            
+              if((hrac1_kocky_div[y].id == q) && (vyhodene_kocky[i][j] == true)) {
+              
+                hrac1_kocky_div[y].id = "none";
+                hrac1_kocky_div[y].style.backgroundImage = "none";
+              
+              }
+              
+              if(pocet_kociek_hrac1 == y) {
+              
+                hrac1_kocky_div[y].id = "none";
+                hrac1_kocky_div[y].style.backgroundImage = "none";
+              
+              }
+            
+            }
+          
+          
+        }
+        
+      }
+         
+    }  
+    
+    
+    
+    var k = 0;
+    
+    for (var i=0;i<=14;i++) {
+    
+       var t = ((k * 5) + 50).toString() + 'px';
+       hrac2_kocky_div[k].style.left = t;
+       k++;
+        
+    }
+    
+    k=0;
+    var pom_kocky = new Array(7);
+    for (var i=0;i<=6;i++) {
+      pom_kocky[i] = new Array(7);
+    }
+    for (var i=0;i<=6;i++) {
+      
+      for (var j=0;j<=6;j++) {
+        pom_kocky[i][j] = true;
+      }
+      }
+    
+    for (var i=0;i<=6;i++) {
+      
+      for (var j=0;j<=6;j++) {
+         
+        if ((hrac2_kocky[i][j] == true) && (pom_kocky[i][j] == true)) { 
+          
+          pom_kocky[i][j] = false;
+          pom_kocky[j][i] = false;
+    
+          
+          var s = i.toString() + '_' + j.toString() + '.jpg';
+          hrac2_kocky_div[k].style.backgroundImage='url('+s+')';
+          var q = i.toString() + '_' + j.toString();
+          hrac2_kocky_div[k].id = q;
+          k++;
+        }
+        else {
+          
+            var q = i.toString() + '_' + j.toString();
+            
+            for(var y=0;y<=14;y++) {
+            
+              if((hrac2_kocky_div[y].id == q) && (vyhodene_kocky[i][j] == true)) {
+              
+                hrac2_kocky_div[y].id = "none";
+                hrac2_kocky_div[y].style.backgroundImage = "none";
+              
+              }
+              
+              if(pocet_kociek_hrac2 == y) {
+              
+                hrac2_kocky_div[y].id = "none";
+                hrac2_kocky_div[y].style.backgroundImage = "none";
+              
+              }
+            
+            }
+          
+          
+        }
+         
+      }  
+    
+    }
+    
+    }
+    
+    function check_status() {
+      
+      var pom1 = true;
+      var pom2 = true;
+      
+      for(var i=0;i<=14;i++) {
+      
+        if(hrac1_kocky_div[i].id != "none") pom1 = false;
+        if(hrac2_kocky_div[i].id != "none") pom2 = false;
+        
+      }  
+      
+      if (pom1) {
+      
+        body_hrac1++;
+        alert("hrac1 vyhral");
+        return true;
+        
+      }
+      
+      if (pom2) {
+      
+        body_hrac2++;
+        alert("hrac2 vyhral");
+        return true;
+      }
+      
+    }
+    
+    function hraj_opponent() {
+    
+    var pom_hrana1;
+    var pom_hrana2;
+    
+    for (var i=0;i<=14;i++) {
+    
+      pom_hrana1 = hrac1_kocky_div[i].id.substr(0,1);
+      pom_hrana2 = hrac1_kocky_div[i].id.substr(2,1);
+      
+      if ((pom_hrana1 == lava_hrana)) {
+      hrac1_kocky[pom_hrana1][pom_hrana2] = false;
+      hrac1_kocky[pom_hrana2][pom_hrana1] = false;
+      vyhodene_kocky[pom_hrana1][pom_hrana2] = true;
+      vyhodene_kocky[pom_hrana2][pom_hrana1] = true;
+      
+      var s = pom_hrana2 + '_' + pom_hrana1 + '.jpg';
+      lava_strana[index_lava_strana].style.backgroundImage='url('+s+')';
+      lava_strana_pole[index_lava_strana] = s;
+      index_lava_strana++;
+      
+      lava_hrana = pom_hrana2;
+      pocet_kociek_hrac1--;
+                                                                                            rasterize_kocky_div();
+      return true;
+    }
+    
+    else if ((pom_hrana1 == prava_hrana)) {
+      hrac1_kocky[pom_hrana1][pom_hrana2] = false;
+      hrac1_kocky[pom_hrana2][pom_hrana1] = false;
+      
+      vyhodene_kocky[pom_hrana1][pom_hrana2] = true;
+      vyhodene_kocky[pom_hrana2][pom_hrana1] = true;
+      
+      var s = pom_hrana1 + '_' + pom_hrana2 + '.jpg';
+      prava_strana[index_prava_strana].style.backgroundImage='url('+s+')';
+      prava_strana_pole[index_prava_strana] = s;
+      
+      index_prava_strana++;
+      
+      prava_hrana = pom_hrana2;
+      pocet_kociek_hrac1--;
+                                                                      rasterize_kocky_div();
+      return true;
+    }
+    
+    else if ((pom_hrana2 == lava_hrana)) {
+      hrac1_kocky[pom_hrana1][pom_hrana2] = false;
+      hrac1_kocky[pom_hrana2][pom_hrana1] = false;
+      vyhodene_kocky[pom_hrana1][pom_hrana2] = true;
+      vyhodene_kocky[pom_hrana2][pom_hrana1] = true;
+      
+      var s = pom_hrana1 + '_' + pom_hrana2 + '.jpg';
+      lava_strana[index_lava_strana].style.backgroundImage='url('+s+')';
+      lava_strana_pole[index_lava_strana] = s;
+      index_lava_strana++;
+                                                
+      lava_hrana = pom_hrana1;
+      pocet_kociek_hrac1--;
+                                                rasterize_kocky_div();
+      return true;
+    }
+    
+    else if ((pom_hrana2 == prava_hrana)) {
+      hrac1_kocky[pom_hrana1][pom_hrana2] = false;
+      hrac1_kocky[pom_hrana2][pom_hrana1] = false;
+      vyhodene_kocky[pom_hrana1][pom_hrana2] = true;
+      vyhodene_kocky[pom_hrana2][pom_hrana1] = true;
+      
+      var s = pom_hrana2 + '_' + pom_hrana1 + '.jpg';
+      prava_strana[index_prava_strana].style.backgroundImage='url('+s+')';
+      prava_strana_pole[index_prava_strana] = s;
+      index_prava_strana++;
+                          
+      prava_hrana = pom_hrana1;
+      pocet_kociek_hrac1--;
+                          rasterize_kocky_div();
+      return true;
+    }
+      
+    }
+    take_block_hrac1();
+    rasterize_kocky_div();
+    return false;
+    
+    }
+    
+    
+    function hraj(elem) {
+    
+    var pom_hrana1 = elem.id.substr(0,1);
+    var pom_hrana2 = elem.id.substr(2,1);
+    
+    
+    if ((pom_hrana1 == lava_hrana)) {
+      hrac2_kocky[pom_hrana1][pom_hrana2] = false;
+      hrac2_kocky[pom_hrana2][pom_hrana1] = false;
+      vyhodene_kocky[pom_hrana1][pom_hrana2] = true;
+      vyhodene_kocky[pom_hrana2][pom_hrana1] = true;
+      
+      var s = pom_hrana2 + '_' + pom_hrana1 + '.jpg';
+      lava_strana[index_lava_strana].style.backgroundImage='url('+s+')';
+      lava_strana_pole[index_lava_strana] = s;
+      index_lava_strana++;
+      
+      lava_hrana = pom_hrana2;
+      pocet_kociek_hrac2--;
+    
+      return true;
+    }
+    
+    else if ((pom_hrana1 == prava_hrana)) {
+      hrac2_kocky[pom_hrana1][pom_hrana2] = false;
+      hrac2_kocky[pom_hrana2][pom_hrana1] = false;
+      
+      vyhodene_kocky[pom_hrana1][pom_hrana2] = true;
+      vyhodene_kocky[pom_hrana2][pom_hrana1] = true;
+      
+      var s = pom_hrana1 + '_' + pom_hrana2 + '.jpg';
+      prava_strana[index_prava_strana].style.backgroundImage='url('+s+')';
+      prava_strana_pole[index_prava_strana] = s;
+      index_prava_strana++;
+      
+      prava_hrana = pom_hrana2;
+      pocet_kociek_hrac2--;
+      return true;
+    }
+    
+    else if ((pom_hrana2 == lava_hrana)) {
+      hrac2_kocky[pom_hrana1][pom_hrana2] = false;
+      hrac2_kocky[pom_hrana2][pom_hrana1] = false;
+      vyhodene_kocky[pom_hrana1][pom_hrana2] = true;
+      vyhodene_kocky[pom_hrana2][pom_hrana1] = true;
+      
+      var s = pom_hrana1 + '_' + pom_hrana2 + '.jpg';
+      lava_strana[index_lava_strana].style.backgroundImage='url('+s+')';
+      lava_strana_pole[index_lava_strana] = s;
+    
+      index_lava_strana++;
+      
+      lava_hrana = pom_hrana1;
+      pocet_kociek_hrac2--;
+      return true;
+    }
+    
+    else if ((pom_hrana2 == prava_hrana)) {
+      hrac2_kocky[pom_hrana1][pom_hrana2] = false;
+      hrac2_kocky[pom_hrana2][pom_hrana1] = false;
+      vyhodene_kocky[pom_hrana1][pom_hrana2] = true;
+      vyhodene_kocky[pom_hrana2][pom_hrana1] = true;
+      
+      var s = pom_hrana2 + '_' + pom_hrana1 + '.jpg';
+      prava_strana[index_prava_strana].style.backgroundImage='url('+s+')';
+      prava_strana_pole[index_prava_strana] = s;
+      index_prava_strana++;
+      
+      prava_hrana = pom_hrana1;
+      pocet_kociek_hrac2--;
+      return true;
+    }
+    else {
+      return false;
+    }
+      
+    }
+    
+    function take_block_hrac1() {
+    
+    var pom = true;
+    var pok = true;
+    pocet_kociek_hrac1++;
+    
+    while(pom) {
+    
+      var ran1 = Math.floor(Math.random() * 7);
+      var ran2 = Math.floor(Math.random() * 7);
+    
+      if(vsetky_kocky[ran1][ran2] == true) {
+    
+        pom = false
+        
+        vsetky_kocky[ran1][ran2] = false;
+        vsetky_kocky[ran2][ran1] = false;      
+        
+        hrac1_kocky[ran1][ran2] = true;
+        hrac1_kocky[ran2][ran1] = true;
+        
+        for(var i=0;i<=14;i++) {
+        
+          if((hrac1_kocky_div[i].id == "none") && (pok)) {
+          
+            var s = ran1 + '_' + ran2 + '.jpg';
+            hrac1_kocky_div[i].style.backgroundImage='url('+s+')';
+            var q = ran1 + '_' + ran2;
+            hrac1_kocky_div[i].id = q;
+            pok = false;
+          
+          }
+      
+        }
+        
+      }
+    }
+    
+    }
+    
+    function take_block_hrac2() {
+    
+    var pom = true;
+    var pok = true;
+    pocet_kociek_hrac2++;
+    
+    while(pom) {
+    
+      var ran1 = Math.floor(Math.random() * 7);
+      var ran2 = Math.floor(Math.random() * 7);
+    
+      if(vsetky_kocky[ran1][ran2] == true) {
+    
+        pom = false
+        
+        vsetky_kocky[ran1][ran2] = false;
+        vsetky_kocky[ran2][ran1] = false;      
+        
+        hrac2_kocky[ran1][ran2] = true;
+        hrac2_kocky[ran2][ran1] = true;
+        
+        for(var i=0;i<=14;i++) {
+        
+          if((hrac2_kocky_div[i].id == "none") && (pok)) {
+          
+            var s = ran1 + '_' + ran2 + '.jpg';
+            hrac2_kocky_div[i].style.backgroundImage='url('+s+')';
+            var q = ran1 + '_' + ran2;
+            hrac2_kocky_div[i].id = q;
+            pok = false;
+          
+          }
+      
+        }
+        
+      }
+    }
+    
+    hraj_opponent();
+    
+    if (check_status()) {
+            
+            end();
+            initialize();
+          
+          }
+     
+    }
+    
+    function end() {
+      
+        var el = document.getElementById('body');
+
+        while ( el.firstChild ) el.removeChild( el.firstChild );
+    }
+    
+    function store() {
+    
+    localStorage["vsetky_kocky"] = JSON.stringify(vsetky_kocky);
+    localStorage["hrac1_kocky"] = JSON.stringify(hrac1_kocky);
+    localStorage["hrac2_kocky"] = JSON.stringify(hrac2_kocky);
+    localStorage["vyhodene_kocky"] = JSON.stringify(vyhodene_kocky);
+    localStorage["body_hrac1"] = body_hrac1;
+    localStorage["body_hrac2"] = body_hrac2;
+    localStorage["lava_strana_pole"] = JSON.stringify(lava_strana_pole);
+    localStorage["prava_strana_pole"] = JSON.stringify(prava_strana_pole);
+    localStorage["pocet_kociek_hrac1"] = pocet_kociek_hrac1;
+    localStorage["pocet_kociek_hrac2"] = pocet_kociek_hrac2;
+    localStorage["stredna_kocka_string"] = stredna_kocka_string;
+    localStorage["prava_hrana"] = prava_hrana;
+    localStorage["lava_hrana"] = lava_hrana;
+    
+    }
+    
+    function load_stored() {
+    
+    vsetky_kocky = JSON.parse(localStorage["vsetky_kocky"]);
+    hrac1_kocky = JSON.parse(localStorage["hrac1_kocky"]);
+    hrac2_kocky = JSON.parse(localStorage["hrac2_kocky"]);
+    vyhodene_kocky = JSON.parse(localStorage["vyhodene_kocky"]);
+    body_hrac1 = localStorage["body_hrac1"];
+    body_hrac2 = localStorage["body_hrac2"];
+    prava_strana_pole = JSON.parse(localStorage["prava_strana_pole"]);
+    lava_strana_pole = JSON.parse(localStorage["lava_strana_pole"]);
+    pocet_kociek_hrac1 = localStorage["pocet_kociek_hrac1"];
+    pocet_kociek_hrac2 = localStorage["pocet_kociek_hrac2"];
+    stredna_kocka_string = localStorage["stredna_kocka_string"];
+    prava_hrana = localStorage["prava_hrana"]; 
+    lava_hrana = localStorage["lava_hrana"]; 
+    
+    }
+    
+    
+    function initialize() {
+    
+    if(localStorage["stredna_kocka_string"] != null) initialize_loaded();
+    else {
+    
+    var velke_okno = document.createElement("div");
+    velke_okno.id = "velke_okno";
+    var stredna_kocka = document.createElement("div");
+    stredna_kocka.id = "stredna_kocka";
+    var hrac1_board = document.createElement("div");
+    hrac1_board.id = "hrac1_board";
+    var hrac2_board = document.createElement("div");
+    hrac2_board.id = "hrac2_board";
+    var prava_strana_board = document.createElement("div");
+    prava_strana_board.id = "prava_strana_board";
+    var lava_strana_board = document.createElement("div");
+    lava_strana_board.id = "lava_strana_board";
+    var take_block = document.createElement("div");
+    take_block.id = "take_block";
+    var score = document.createElement("div");
+    score.id = "score";
+    var save = document.createElement("div");
+    save.id = "save";
+    var hrac1 = document.createElement("div");
+    hrac1.id = "hrac1";
+    hrac1.innerHTML = "hrac 1";
+    var hrac2 = document.createElement("div");
+    hrac2.id = "hrac2";
+    hrac2.innerHTML = "hrac 2";
+    
+    
+    
+    index_prava_strana = 0;
+    index_lava_strana = 0;
+    
+    pocet_kociek_hrac1 = 7;
+    pocet_kociek_hrac2 = 7;
+    
+    
+    //vytvori array///////////////////////////////////////////////////////////
+    for(var i=0;i<=6;i++) {
+      vsetky_kocky[i] = new Array(7);
+      vyhodene_kocky[i] = new Array(7);
+      hrac1_kocky[i] = new Array(7);
+      hrac2_kocky[i] = new Array(7);
+    
+    }
+    
+    for(var i=0;i<=14;i++) {
+    
+      prava_strana[i] = document.createElement("div");
+      prava_strana[i].className = "prava_strana";
+      
+      lava_strana[i] = document.createElement("div");
+      lava_strana[i].className = "lava_strana";
+      
+    }
+    
+    for(var i=0;i<=14;i++) {
+    
+      hrac1_kocky_div[i] = document.createElement("div");
+      hrac1_kocky_div[i].className = "hrac1_kocky_div";
+      hrac1_kocky_div[i].id = "none";
+      hrac2_kocky_div[i] = document.createElement("div");
+      hrac2_kocky_div[i].className = "hrac2_kocky_div";
+      hrac2_kocky_div[i].id = "none";
+      prava_strana_pole[i] = "q";
+      lava_strana_pole[i] = "q";
+      
+      hrac2_kocky_div[i].addEventListener('click', function(event) {
+			
+		    if (hraj(this)) {
+		      
+		      if (check_status()) {
+		        end();
+            initialize();
+          }
+          else hraj_opponent();
+          
+          if (check_status()) {
+            
+            end();
+            initialize();
+          
+          }
+                    
+        
+        }
+			
+      });
+
+    }
+    
+    //nastavi na default//////////////////////////////////////////////////////   
+    for (var i=0;i<=6;i++) {
+      
+      for (var j=0;j<=6;j++) {
+         
+        vsetky_kocky[i][j] = true;
+        hrac1_kocky[i][j] = false;
+        hrac2_kocky[i][j] = false;
+         
+        }  
+    }
+    
+    //vytvori strednu kocku a nastavi hrany//////////////////////////////////////////////////  
+    ran1 = Math.floor(Math.random() * 7);
+    ran2 = Math.floor(Math.random() * 7);
+    vsetky_kocky[ran1][ran2] = false;
+    vsetky_kocky[ran2][ran1] = false;
+    
+    var s = ran1.toString() + '_' + ran2.toString() + '.jpg';
+    stredna_kocka.style.backgroundImage='url('+s+')';
+    stredna_kocka_string = ran1.toString() + '_' + ran2.toString();
+    
+    
+    lava_hrana = ran1;
+    prava_hrana = ran2;
+    
+    
+    //rozdeli kocky hracom////////////////////////////////////////////////////
+    var i = 0;
+    while(i<7) {
+      
+      ran1 = Math.floor(Math.random() * 7);
+      ran2 = Math.floor(Math.random() * 7);
+      
+      if (vsetky_kocky[ran1][ran2] == true) {
+      
+         vsetky_kocky[ran1][ran2] = false;
+         vsetky_kocky[ran2][ran1] = false;
+         
+         hrac1_kocky[ran1][ran2] = true;
+         hrac1_kocky[ran2][ran1] = true;
+         
+         var s = ran1.toString() + '_' + ran2.toString();
+         hrac1_kocky[ran1][ran2].id = s;
+         hrac1_kocky[ran2][ran1].id = s;
+         
+         i++;
+      }  
+    }
+    
+    i = 0;
+    while(i<7) {
+      
+      ran1 = Math.floor(Math.random() * 7);
+      ran2 = Math.floor(Math.random() * 7);
+      
+      if (vsetky_kocky[ran1][ran2] == true) {
+      
+         vsetky_kocky[ran1][ran2] = false;
+         vsetky_kocky[ran2][ran1] = false;
+         
+         hrac2_kocky[ran1][ran2] = true;
+         hrac2_kocky[ran2][ran1] = true;
+         
+         var s = ran1.toString() + '_' + ran2.toString();
+         hrac2_kocky[ran1][ran2].id = s;
+         hrac2_kocky[ran2][ran1].id = s;
+         
+         i++;
+      }  
+    }
+    
+    rasterize_kocky_div();
+    
+    
+    
+    //append elementov//////////////////////////////////////////////////////////
+    
+    for(var i=0;i<=14;i++) {
+    
+      hrac1_board.appendChild(hrac1_kocky_div[i]);
+      
+    }
+    
+    for(var i=0;i<=14;i++) {
+    
+      hrac2_board.appendChild(hrac2_kocky_div[i]);
+      
+    }
+    take_block.addEventListener('click', function(event) {
+    
+      take_block_hrac2();
+    });
+    save.addEventListener('click', function(event) {
+    
+      store();
+      load_stored();
+
+    });
+    score.innerHTML = "hrac 1: " +body_hrac1+ "<br>" + "hrac 2: " +body_hrac2;
+    hrac1_board.appendChild(score);
+    hrac1_board.appendChild(save);
+    hrac1_board.appendChild(hrac1);
+    take_block.innerHTML = "Take block";
+    
+    hrac2_board.appendChild(take_block);
+    hrac2_board.appendChild(hrac2);
+    velke_okno.appendChild(hrac1_board);
+    velke_okno.appendChild(hrac2_board);  
+    velke_okno.appendChild(stredna_kocka);
+    
+    for(var i=0;i<=14;i++) {
+    
+      prava_strana_board.appendChild(prava_strana[i]);
+      lava_strana_board.appendChild(lava_strana[i]);
+      
+    }
+    
+    velke_okno.appendChild(prava_strana_board);
+    velke_okno.appendChild(lava_strana_board);
+    
+    document.body.insertBefore(velke_okno,document.body.childNodes[0]);
+   
+    }
+    }
+    
+    function initialize_loaded() {
+    
+    console.log("kokot");
+    var velke_okno = document.createElement("div");
+    velke_okno.id = "velke_okno";
+    var stredna_kocka = document.createElement("div");
+    stredna_kocka.id = "stredna_kocka";
+    var hrac1_board = document.createElement("div");
+    hrac1_board.id = "hrac1_board";
+    var hrac2_board = document.createElement("div");
+    hrac2_board.id = "hrac2_board";
+    var prava_strana_board = document.createElement("div");
+    prava_strana_board.id = "prava_strana_board";
+    var lava_strana_board = document.createElement("div");
+    lava_strana_board.id = "lava_strana_board";
+    var take_block = document.createElement("div");
+    take_block.id = "take_block";
+    var score = document.createElement("div");
+    score.id = "score";
+    var save = document.createElement("div");
+    save.id = "save";
+    var hrac1 = document.createElement("div");
+    hrac1.id = "hrac1";
+    hrac1.innerHTML = "hrac 1";
+    var hrac2 = document.createElement("div");
+    hrac2.id = "hrac2";
+    hrac2.innerHTML = "hrac 2";
+    
+    index_prava_strana = 0;
+    index_lava_strana = 0;
+    
+    console.log(lava_strana_pole[index_lava_strana]);
+    console.log(prava_strana_pole[index_prava_strana]);
+    
+    
+    //vytvori array///////////////////////////////////////////////////////////
+    load_stored();
+    localStorage.clear();
+    
+    for(var i=0;i<=14;i++) {
+    
+      prava_strana[i] = document.createElement("div");
+      prava_strana[i].className = "prava_strana";
+      
+      lava_strana[i] = document.createElement("div");
+      lava_strana[i].className = "lava_strana";
+      
+    }
+    
+    for(var i=0;i<=14;i++) {
+    
+      hrac1_kocky_div[i] = document.createElement("div");
+      hrac1_kocky_div[i].className = "hrac1_kocky_div";
+      hrac1_kocky_div[i].id = "none";
+      hrac2_kocky_div[i] = document.createElement("div");
+      hrac2_kocky_div[i].className = "hrac2_kocky_div";
+      hrac2_kocky_div[i].id = "none";
+      
+      hrac2_kocky_div[i].addEventListener('click', function(event) {
+			
+		    if (hraj(this)) {
+		      
+		      if (check_status()) {
+		        end();
+            initialize();
+          }
+          else hraj_opponent();
+          
+          if (check_status()) {
+            
+            end();
+            initialize();
+          
+          }
+                    
+        
+        }
+			
+      });
+
+    }
+    
+    
+    //vytvori strednu kocku a nastavi hrany//////////////////////////////////////////////////  
+    
+    var s = stredna_kocka_string + ".jpg";
+    stredna_kocka.style.backgroundImage='url('+s+')';
+    
+    var c = true;
+    index_prava_strana = 0;
+    while(c) {
+      if(prava_strana_pole[index_prava_strana] != "q") {
+      
+        var s = prava_strana_pole[index_prava_strana];
+
+        prava_strana[index_prava_strana].style.backgroundImage = 'url('+s+')';
+        index_prava_strana++;
+      
+      }
+      else c = false;    
+    }
+    
+    var c = true;
+    index_lava_strana = 0;
+    while(c) {
+      if(lava_strana_pole[index_lava_strana] != "q") {
+      
+        var s = lava_strana_pole[index_lava_strana];
+        lava_strana[index_lava_strana].style.backgroundImage = 'url('+s+')';
+        index_lava_strana++;
+      
+      }
+      else c = false;    
+    }
+    
+    rasterize_kocky_div();
+    
+    
+    
+    //append elementov//////////////////////////////////////////////////////////
+    
+    for(var i=0;i<=14;i++) {
+    
+      hrac1_board.appendChild(hrac1_kocky_div[i]);
+      
+    }
+    
+    for(var i=0;i<=14;i++) {
+    
+      hrac2_board.appendChild(hrac2_kocky_div[i]);
+      
+    }
+    take_block.addEventListener('click', function(event) {
+    
+      
+      take_block_hrac2();
+      
+      
+      
+    });
+    save.addEventListener('click', function(event) {
+    
+      store();
+      load_stored();
+      
+    });
+    score.innerHTML = "hrac 1: " +body_hrac1+ "<br>" + "hrac 2: " +body_hrac2;
+    hrac1_board.appendChild(score);
+    hrac1_board.appendChild(save);
+    hrac1_board.appendChild(hrac1);
+    take_block.innerHTML = "Take block";
+    localStorage.lastname = "Smith";
+    console.log(localStorage.lastname);
+    hrac2_board.appendChild(take_block);
+    hrac2_board.appendChild(hrac2);
+    velke_okno.appendChild(hrac1_board);
+    velke_okno.appendChild(hrac2_board);  
+    velke_okno.appendChild(stredna_kocka);
+    
+    for(var i=0;i<=14;i++) {
+    
+      prava_strana_board.appendChild(prava_strana[i]);
+      lava_strana_board.appendChild(lava_strana[i]);
+      
+    }
+    
+    velke_okno.appendChild(prava_strana_board);
+    velke_okno.appendChild(lava_strana_board);
+    
+    end();
+    document.body.insertBefore(velke_okno,document.body.childNodes[0]);
+   
+  
+    }
+  </script>
+  
+  </body>
+</html>

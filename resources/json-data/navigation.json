@@ -5,6 +5,11 @@
     "sub_menu": false
   },
   { 
+    "name": "Nameday" , 
+    "load_content": "nameday_wrap",
+    "sub_menu": false
+  },
+  { 
     "name": "Notes" , 
     "load_content": "notes",
     "sub_menu": false
@@ -54,6 +59,18 @@
             {
               "name": "Standalone version",
               "load_content": "http://tina.fei.stuba.sk/~xklinec/semestral/game_klinec.html",
+              "sub_menu": false
+            }
+          ]
+        },
+        {
+          "name": "Domino",
+          "load_content": false,
+          "sub_menu": [
+            {
+              "name": "Play",
+              "load_content": "game-domino",
+              "breadcrumb_name": "Play Domino",
               "sub_menu": false
             }
           ]

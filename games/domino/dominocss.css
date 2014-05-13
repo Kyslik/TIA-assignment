@@ -1,0 +1,135 @@
+#body {
+display:block;
+}
+
+#velke_okno {
+display:block;
+width: 940px;
+height:520px;
+background-color:#0a6c03;
+margin:auto;
+}
+
+#stredna_kocka {
+position:relative;
+top:78px;
+display:block;
+width:40px;height:25px;
+margin:auto auto auto auto;
+}
+
+#hrac1_board {
+width: 900px;
+height:80px;
+position: relative;
+top:20px;
+display:block;
+margin-left: auto;
+margin-right: auto;
+background-color:#CFCFCF;
+box-shadow: 10px 10px 10px black;
+border-radius:25px;
+}
+
+#hrac2_board {
+width: 900px;
+height:80px;
+position: relative;
+top:330px;
+display:block;
+margin-left: auto;
+margin-right: auto;
+background-color:#CFCFCF;
+box-shadow: 10px 10px 10px black;
+border-radius:25px;
+}
+
+.hrac1_kocky_div {
+display:block;
+position:relative;
+right:100px;
+top:26px;
+float:left;
+display:block;
+width:40px;height:25px;
+}
+
+.hrac2_kocky_div {
+position:relative;
+display:block;
+width:40px;height:25px;
+float:left;
+top:28px;
+}
+
+#lava_strana_board {
+height:25px;
+position:relative;
+left:-525px;
+top:25px;
+
+}
+
+#prava_strana_board {
+height:25px;
+position:relative;
+left:525px;
+top:52px;
+
+}
+
+
+.lava_strana {
+position:relative;
+display:block;
+float:right;
+width:40px;height:25px;
+top:3px;
+}
+
+.prava_strana {
+position:relative;
+display:block;
+float:left;
+width:40px;height:25px;
+top:1px;
+      
+}
+
+#take_block{
+width:100px;height:30px;
+background-color: #454545;
+position:relative;
+left:770px;
+top:20px;
+border: 1px solid black;
+font-family:"Arial Black", Gadget, sans-serif;
+}
+
+#score{
+position:relative;
+left:190px;
+top:15px;
+font-family:"Arial Black", Gadget, sans-serif;
+}
+
+#save{
+width:64px;height:64px;
+background-image: url('save.png');;
+position:relative;
+left:830px;
+top:60px;
+font-family:"Arial Black", Gadget, sans-serif;
+}
+
+#hrac1 {
+position:relative;
+top:-20px;left:20px;
+font-family:"Arial Black", Gadget, sans-serif;
+}
+
+#hrac2 {
+position:relative;
+top:-60px;left:20px;
+font-family:"Arial Black", Gadget, sans-serif;
+}

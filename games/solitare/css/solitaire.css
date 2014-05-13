@@ -1,0 +1,56 @@
+#solitaire{font-family: CardFont, "Courier New"; position:relative;	display:block; width:940px;	min-height:590px; 
+		background-color:green; border-radius: 10px;}
+	
+#settings{position:relative; display:block;	width:100%; text-align:center;}
+
+#settings .button{display:inline-block; float:left; padding:10px; margin:0px 10px 10px 10px;	border-radius: 0px 0px 10px 10px; font-size:120%; color:black;}
+
+#moves, #casovac{display:inline-block; float:center; padding:5px; margin:0px 10px 10px 10px; border-radius: 0px 0px 10px 10px; font-size:120%; color:black;}
+
+.card{position:absolute; display:block;	width:122px; height:190px; overflow:visible; background-image:url('../cards/facedown.png');
+	background-repeat:no-repeat; background-position:left top;}
+	
+#a{position:relative; display:block;	clear:both;	float:left;	margin:15px; width:122px; height:190px;	background-position:left top;}
+
+#b{position:relative; display:block; float:left; margin:15px; width:162px; height:190px; background-position:left top;}
+
+#b .card:nth-last-child(1){margin-left:40px;}
+
+#b .card:nth-last-child(2){margin-left:20px;	box-shadow: none;}
+
+#b .card:nth-last-child(3){box-shadow: none;}
+
+#c{display:block; float:right; margin:15px;}
+
+.foundation{position:relative; display:block; float:left; margin:0px 14px 0px 0px; width:122px;	height:190px;
+	background-image:url('../cards/freeslot.png'); background-position:left top;}
+	
+#d {
+display: block;
+clear: both;
+width: 940px;
+/* padding-left: 120px; */
+height: 600px;
+/* margin-left: 139px; */
+text-align: center;
+}
+
+.stack {
+position: relative;
+display: inline-block;
+margin: 10px;
+/* margin-right: 14%; */
+margin-left: 0px;
+width: 120px;
+height: 190px;
+background-image: url('../cards/freeslot.png');
+background-position: left top;
+}
+	
+.stack .card{position:relative; border-top:1px solid transparent;}
+
+.stack .card .card{position:relative; border-top:1px solid transparent; margin-top:20px;}
+
+#e{position:absolute;}
+
+#e .card{position:relative; border-top:1px solid transparent; margin-top:20px;}

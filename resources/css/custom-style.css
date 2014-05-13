@@ -54,7 +54,13 @@ iframe.g15-coins{
 }
 
 iframe.g-solitare {
+	height: 920px;
+
+}
+
+iframe.g-domino {
 	height: 600px;
+
 }
 
 table#notes-table {

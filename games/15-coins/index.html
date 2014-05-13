@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="sk">
+	<head>
+		<meta charset="utf-8">
+		<meta name="description" content="TIA, 15 Coins game">
+		<meta name="keywords" content="TIA, HTML5, CSS, JavaScript">
+		<meta name="author" content="Martin Kiesel">
+		<link rel="shortcut icon" href="resources/images/favicon.ico">
+		<link rel="stylesheet" href="resources/css/custom_style.css">
+		<script language="javascript" type="text/javascript" src="resources/js/jquery.js"></script>
+		<script language="javascript" type="text/javascript" src="resources/js/script.js"></script>
+		<script language="javascript" type="text/javascript" src="resources/js/game.js"></script>
+
+		<title>TIA | 15 drobných</title>
+	</head>
+	<body>
+		<div id="game-background">
+			<div id="game-menu">
+				<button class="round-btn heartbeat go">GO 15!</button>
+				<div id="new-best-score">
+					<h2>new best score</h2>
+					<p>10 points in 851.45 Seconds</p>
+				</div>
+				<div id="repeat-score">
+					<p class="current">10 points in 851.45 Seconds</p>
+					<p class="best">15 points in 120.56 Seconds</p>
+				</div>
+				<div class="hint">
+					<p>OR</p>
+					<button class="spacebar-btn"><small>(spacebar)</small></button>
+					<p><small>Use arrow keys to rotate (&#8592;) left or (&#8594;) right.</small><p>
+				</div>
+
+				<ul id="difficulty">
+					<li data-id="1" class="active">easy</li>
+					<li data-id="2">medium</li>
+					<li data-id="3">hard</li>
+					<li data-id="4">unbeatable</li>
+				</ul>
+			</div>
+			<div id="game-menu-change"></div>
+			<canvas id="game-board" width="680" height="440"></canvas>
+			<canvas id="game-player" width="680" height="440"></canvas>
+			<canvas id="game-mirrors" width="680" height="440"></canvas>
+		</div>
+	</body>
+</html>
